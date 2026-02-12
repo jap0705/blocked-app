@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application Blocked | Leadership Circle IT Security</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  // ═══════════════════════════════════════════════════════════
+  //  CONFIGURATION — Edit these values to customize the page
+  // ═══════════════════════════════════════════════════════════
+
+  const CONFIG = {
+    // Company
+    companyName:    "Leadership Circle",
+    companyDomain:  "leadershipcircle.com",
+    companyLogoUrl: "", // Optional: URL to your logo image (leave empty to use text)
+
+    // Help Desk (Jira Service Management)
+    helpdeskName:   "Leadership Circle Help Center",
+    helpdeskUrl:    "https://leadershipcircle.atlassian.net/servicedesk/customer/portals",
+
+    // Jira Service Management ticket details
+    issueCategory:  "IT Support",
+    issueType:      "System Access or Procurement Request Form",
+
+    // Policy
+    policyName:     "Cloud App Usage Policy",
+  };
+</script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --brand: #1a5c55;
+    --brand-light: #238078;
+    --brand-dim: rgba(26, 92, 85, 0.08);
+
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-raised: #f1f3f5;
+    --border: #e2e5ea;
+    --text: #1e2328;
+    --text-muted: #5f6971;
+    --red: #dc2626;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --red-dim: rgba(220, 38, 38, 0.07);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    line-height: 1.6;
+  }
+
+  .brand-bar {
+    width: 100%;
+    background: var(--brand);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+  }
+  .brand-bar .logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-bar .sep { width: 1px; height: 18px; background: rgba(255,255,255,0.3); }
+  .brand-bar .label { font-size: 13px; font-weight: 500; opacity: 0.85; }
+  .brand-bar img.logo { height: 28px; object-fit: contain; }
+
+  .container { max-width: 640px; width: 100%; padding: 36px 20px 60px; animation: fadeUp 0.4s ease-out; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red);
+    padding: 5px 13px; border-radius: 100px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .badge .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .subtitle { font-size: 15px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.65; }
+
+  .blocked-banner {
+    background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 14px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .blocked-banner svg { flex-shrink: 0; color: var(--red); margin-top: 2px; }
+  .blocked-banner p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 24px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card h2 .icon {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .card h2 .icon.red { background: var(--red-dim); color: var(--red); }
+  .card h2 .icon.brand { background: var(--brand-dim); color: var(--brand); }
+
+  .card p, .card li { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .card ul { list-style: none; margin-top: 6px; }
+  .card ul li { padding: 6px 0 6px 18px; position: relative; }
+  .card ul li::before {
+    content: ''; position: absolute; left: 0; top: 14px;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--border);
+  }
+
+  /* ── Steps ── */
+  .steps { counter-reset: step; margin-top: 12px; }
+  .step { display: flex; gap: 14px; padding: 12px 0; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; left: 14px; top: 42px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .step-number {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--surface-raised); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; flex-shrink: 0; counter-increment: step;
+  }
+  .step-number::before { content: counter(step); }
+  .step-content h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .step-content p { font-size: 13px; color: var(--text-muted); }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .info-item { background: var(--surface-raised); border-radius: 7px; padding: 12px 14px; }
+  .info-item .label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 3px; }
+  .info-item .value { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text); }
+
+  .actions { display: flex; gap: 10px; margin-top: 28px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px 22px; border-radius: 7px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: none; transition: all 0.15s ease;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-light); transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-raised); }
+
+  .footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--text-muted); opacity: 0.5; }
+
+  @media (max-width: 500px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .actions { flex-direction: column; }
+    h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="brand-bar" id="brandBar">
+    <span class="logo-text" id="brandName"></span>
+    <span class="sep"></span>
+    <span class="label">IT Security</span>
+  </div>
+
+  <div class="container">
+    <div class="badge">
+      <span class="dot"></span>
+      Access Blocked
+    </div>
+
+    <h1>This application has been blocked</h1>
+    <p class="subtitle"><span id="companyInline"></span>'s security policy prevents access to this cloud application.</p>
+
+    <div class="blocked-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+      </svg>
+      <p>This app has been classified as <strong>unsanctioned</strong> by IT Security. Access is blocked to protect organizational data and comply with security policies. This is not an error — it is an intentional security control.</p>
+    </div>
+
+    <div class="card">
+      <h2>
+        <span class="icon red">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        Why is this app blocked?
+      </h2>
+      <p>Applications may be blocked for one or more of the following reasons:</p>
+      <ul>
+        <li>The app does not meet your organization's security or compliance requirements.</li>
+        <li>The app has known vulnerabilities or has been involved in data breaches.</li>
+        <li>The app's data handling practices conflict with company policy (e.g., data residency, encryption).</li>
+        <li>A sanctioned alternative already exists for the same functionality.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>
+        <span class="icon brand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </span>
+        How to request an exception
+      </h2>
+      <p>If you believe this app is necessary for your work, open a ticket in the <strong id="helpdeskNameInline"></strong>:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number"></div>
+          <div class="step-content">
+            <h3>Open the Help Desk portal</h3>
+            <p>Go to the <strong id="helpdeskNameStep"></strong> and select <strong id="issueCategoryStep"></strong>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number"></div>
+          <div class="step-content">
+            <h3 id="issueTypeStep"></h3>
+            <p>Choose this request type, then provide the app name, URL, and your business justification.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number"></div>
+          <div class="step-content">
+            <h3>IT Security will review</h3>
+            <p>The security team will evaluate the app's risk profile and respond, typically within 3–5 business days.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="label">Contact Us About</div>
+          <div class="value" id="infoCategory"></div>
+        </div>
+        <div class="info-item">
+          <div class="label">Issue Type</div>
+          <div class="value" id="infoIssueType"></div>
+        </div>
+        <div class="info-item">
+          <div class="label">Policy Reference</div>
+          <div class="value" id="infoPolicy"></div>
+        </div>
+        <div class="info-item">
+          <div class="label">Portal</div>
+          <div class="value" id="infoHelpdesk"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a id="helpdeskLink" href="#" target="_blank" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        Open Help Desk
+      </a>
+      <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+    </div>
+
+    <p class="footer" id="footerText"></p>
+  </div>
+
+  <script>
+    document.getElementById('brandName').textContent = CONFIG.companyName;
+    document.getElementById('companyInline').textContent = CONFIG.companyName;
+    document.getElementById('helpdeskNameInline').textContent = CONFIG.helpdeskName;
+    document.getElementById('helpdeskNameStep').textContent = CONFIG.helpdeskName;
+    document.getElementById('issueCategoryStep').textContent = CONFIG.issueCategory;
+    document.getElementById('issueTypeStep').textContent = CONFIG.issueType;
+    document.getElementById('helpdeskLink').href = CONFIG.helpdeskUrl;
+    document.getElementById('infoCategory').textContent = CONFIG.issueCategory;
+    document.getElementById('infoIssueType').textContent = CONFIG.issueType;
+    document.getElementById('infoPolicy').textContent = CONFIG.policyName;
+    document.getElementById('infoHelpdesk').textContent = CONFIG.helpdeskName;
+    document.getElementById('footerText').innerHTML =
+      `Managed by ${CONFIG.companyName} IT Security &middot; Microsoft Defender for Cloud Apps`;
+
+    if (CONFIG.companyLogoUrl) {
+      const bar = document.getElementById('brandBar');
+      const nameEl = document.getElementById('brandName');
+      const img = document.createElement('img');
+      img.src = CONFIG.companyLogoUrl;
+      img.alt = CONFIG.companyName;
+      img.className = 'logo';
+      bar.replaceChild(img, nameEl);
+    }
+  </script>
+</body>
+</html>
